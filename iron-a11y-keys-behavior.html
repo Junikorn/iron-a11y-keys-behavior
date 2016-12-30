@@ -211,22 +211,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           event: 'keydown'
         };
       }
-      return keyComboString.split('+').reduce(function(parsedKeyCombo, keyComboPart) {
-        var eventParts = keyComboPart.split(':');
-        var keyName = eventParts[0];
-        var event = eventParts[1];
-
-        if (keyName in MODIFIER_KEYS) {
-          parsedKeyCombo[MODIFIER_KEYS[keyName]] = true;
+      var eventParts = keyComboString.split(':'),
+        keyCombo = eventParts[0].split('+'),
+        lastIndex = keyCombo.length - 1,
+        parsedKeyCombo = {
+          event: eventParts[1] || 'keydown'
+        };
+      keyCombo.forEach(function(v, i){
+        if(i === lastIndex){
+          parsedKeyCombo.key = v;
+        }else if(v in MODIFIER_KEYS){
+          parsedKeyCombo[MODIFIER_KEYS[v]] = true;
           parsedKeyCombo.hasModifiers = true;
         }
-        parsedKeyCombo.key = keyName;
-        parsedKeyCombo.event = event || parsedKeyCombo.event || 'keydown';
-
-        return parsedKeyCombo;
-      }, {
-        combo: keyComboString.split(':').shift()
       });
+    return parsedKeyCombo;
     }
 
     function parseEventString(eventString) {
