@@ -39,6 +39,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       8: 'backspace',
       9: 'tab',
       13: 'enter',
+      16: 'shift',
+      17: 'ctrl',
+      18: 'alt',
       27: 'esc',
       33: 'pageup',
       34: 'pagedown',
@@ -216,10 +219,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (keyName in MODIFIER_KEYS) {
           parsedKeyCombo[MODIFIER_KEYS[keyName]] = true;
           parsedKeyCombo.hasModifiers = true;
-        } else {
-          parsedKeyCombo.key = keyName;
-          parsedKeyCombo.event = event || 'keydown';
         }
+        parsedKeyCombo.key = keyName;
+        parsedKeyCombo.event = event || parsedKeyCombo.event || 'keydown';
 
         return parsedKeyCombo;
       }, {
